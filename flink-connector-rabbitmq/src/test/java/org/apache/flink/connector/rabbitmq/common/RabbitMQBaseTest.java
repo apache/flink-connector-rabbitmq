@@ -81,6 +81,33 @@ public abstract class RabbitMQBaseTest {
         flinkCluster.getClusterClient().submitJob(job);
     }
 
+    public RabbitMQContainerClient<String> addSinkOn(
+            DataStream<String> stream, ConsistencyMode consistencyMode, int countDownLatchSize)
+            throws IOException, TimeoutException {
+        RabbitMQContainerClient<String> client =
+                new RabbitMQContainerClient<>(
+                        rabbitMq, new SimpleStringSchema(), countDownLatchSize);
+        String queueName = client.createQueue();
+        final RabbitMQConnectionConfig connectionConfig =
+                new RabbitMQConnectionConfig.Builder()
+                        .setHost(rabbitMq.getHost())
+                        .setVirtualHost("/")
+                        .setUserName(rabbitMq.getAdminUsername())
+                        .setPassword(rabbitMq.getAdminPassword())
+                        .setPort(rabbitMq.getMappedPort(RABBITMQ_PORT))
+                        .build();
+
+        RabbitMQSink<String> sink =
+                RabbitMQSink.<String>builder()
+                        .setConnectionConfig(connectionConfig)
+                        .setQueueName(queueName)
+                        .setSerializationSchema(new SimpleStringSchema())
+                        .setConsistencyMode(consistencyMode)
+                        .build();
+        stream.sinkTo(sink).setParallelism(1);
+        return client;
+    }
+
     protected DataStream<String> addSourceOn(
             StreamExecutionEnvironment env, ConsistencyMode consistencyMode)
             throws IOException, TimeoutException {
