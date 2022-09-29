@@ -5,7 +5,7 @@ github:
     rebase: true
   labels:
     - flink
-    - redis
+    - rabbitmq
     - connector
     - datastream
     - table
