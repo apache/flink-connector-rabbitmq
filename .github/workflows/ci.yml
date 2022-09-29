@@ -16,7 +16,7 @@
 # limitations under the License.
 ################################################################################
 
-name: Build flink-connector-elasticsearch
+name: Build flink-connector-rabbitmq
 on: [push, pull_request]
 jobs:
   compile_and_test:
@@ -24,8 +24,13 @@ jobs:
     strategy:
       matrix:
         jdk: [8, 11]
+    timeout-minutes: 30
     env:
+      MVN_COMMON_OPTIONS: -U -B --no-transfer-progress
       MVN_CONNECTION_OPTIONS: -Dhttp.keepAlive=false -Dmaven.wagon.http.pool=false -Dmaven.wagon.httpconnectionManager.ttlSeconds=120
+      FLINK_URL: https://s3.amazonaws.com/flink-nightly/flink-1.16-SNAPSHOT-bin-scala_2.12.tgz
+      MVN_BUILD_OUTPUT_FILE: "/tmp/mvn_build_output.out"
+      MVN_VALIDATION_DIR: "/tmp/flink-validation-deployment"
     steps:
       - run: echo "Running CI pipeline for JDK version ${{ matrix.jdk }}"
 
@@ -39,10 +44,32 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Set Maven 3.8.5
+      - name: Set Maven 3.8.6
         uses: stCarolas/setup-maven@v4.2
         with:
-          maven-version: 3.8.5
+          maven-version: 3.8.6
+
+      - name: Download Flink binary
+        working-directory: ./..
+        run: wget -q -c ${{ env.FLINK_URL }} -O - | tar -xz
 
       - name: Compile and test flink-connector-elasticsearch
-        run: mvn clean install -Dscala-2.12 -Dflink.convergence.phase=install -Pcheck-convergence -U -B ${{ env.MVN_CONNECTION_OPTIONS }}
+        timeout-minutes: 20
+        run: |
+          set -o pipefail
+
+          mvn clean deploy ${MVN_COMMON_OPTIONS} \
+            -DaltDeploymentRepository=validation_repository::default::file:${{ env.MVN_VALIDATION_DIR }} \
+            -Dscala-2.12 \
+            -Prun-end-to-end-tests -DdistDir=$(pwd)/../flink-1.16-SNAPSHOT \
+            -Dflink.convergence.phase=install -Pcheck-convergence \
+            ${{ env.MVN_CONNECTION_OPTIONS }} \
+            -Dlog4j.configurationFile=file://$(pwd)/tools/ci/log4j.properties \
+            | tee ${{ env.MVN_BUILD_OUTPUT_FILE }}
+
+      - name: Check licensing
+        run: |
+          mvn ${MVN_COMMON_OPTIONS} exec:java@check-licensing -N \
+            -Dexec.args="${{ env.MVN_BUILD_OUTPUT_FILE }} $(pwd) ${{ env.MVN_VALIDATION_DIR }}" \
+            ${{ env.MVN_CONNECTION_OPTIONS }} \
+            -Dlog4j.configurationFile=file://$(pwd)/tools/ci/log4j.properties
