@@ -8,8 +8,6 @@ github:
     - rabbitmq
     - connector
     - datastream
-    - table
-    - sql
   collaborators:
     - flinkbot
 notifications:
