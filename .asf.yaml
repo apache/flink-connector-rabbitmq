@@ -8,6 +8,7 @@ github:
     - rabbitmq
     - connector
     - datastream
+  autolink_jira: FLINK
   collaborators:
     - flinkbot
 notifications:
