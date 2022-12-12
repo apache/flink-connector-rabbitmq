@@ -89,6 +89,7 @@ jobs:
             -Dscala-2.12 \
             -Prun-end-to-end-tests -DdistDir=${{ env.FLINK_CACHE_DIR }}/flink-${{ inputs.flink_version }} \
             -Dflink.convergence.phase=install -Pcheck-convergence \
+            -Darchunit.freeze.store.default.allowStoreUpdate=false \
             ${{ env.MVN_CONNECTION_OPTIONS }} \
             -Dlog4j.configurationFile=file://$(pwd)/tools/ci/log4j.properties \
             | tee ${{ env.MVN_BUILD_OUTPUT_FILE }}
