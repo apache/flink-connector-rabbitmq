@@ -50,7 +50,7 @@ under the License.
     <properties>
         <flink.version>1.16.0</flink.version>
 
-        <junit5.version>5.8.1</junit5.version>
+        <junit5.version>5.9.1</junit5.version>
         <assertj.version>3.23.1</assertj.version>
         <archunit.version>0.22.0</archunit.version>
         <testcontainers.version>1.17.2</testcontainers.version>
