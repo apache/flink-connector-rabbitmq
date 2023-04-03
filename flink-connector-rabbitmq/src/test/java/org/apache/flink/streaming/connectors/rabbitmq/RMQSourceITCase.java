@@ -34,8 +34,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.DiscardingSink;
 import org.apache.flink.streaming.api.functions.sink.SinkFunction;
 import org.apache.flink.streaming.connectors.rabbitmq.common.RMQConnectionConfig;
+import org.apache.flink.streaming.connectors.rabbitmq.test.DockerImageVersions;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
-import org.apache.flink.util.DockerImageVersions;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
