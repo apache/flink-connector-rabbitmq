@@ -58,7 +58,7 @@ under the License.
         <hamcrest.version>1.3</hamcrest.version>
 
         <japicmp.skip>false</japicmp.skip>
-        <japicmp.referenceVersion>1.16.0</japicmp.referenceVersion>
+        <japicmp.referenceVersion>3.0.0-1.16</japicmp.referenceVersion>
 
         <slf4j.version>1.7.36</slf4j.version>
         <log4j.version>2.17.2</log4j.version>
