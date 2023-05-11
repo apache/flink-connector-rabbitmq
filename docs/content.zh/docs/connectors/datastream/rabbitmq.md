@@ -38,9 +38,9 @@ Flink 自身既没有复用 "RabbitMQ AMQP Java Client" 的代码，也没有将
 
 这个连接器可以访问 [RabbitMQ](http://www.rabbitmq.com/) 的数据流。使用这个连接器，需要在工程里添加下面的依赖：
 
-{{< connector_artifact flink-connector-rabbitmq 3.0.0 >}}
+{{< connector_artifact flink-connector-rabbitmq rabbitmq >}}
 
-{{< py_connector_download_link "rabbitmq" 3.0.0 >}}
+{{< py_connector_download_link "rabbitmq" >}}
 
 注意连接器现在没有包含在二进制发行版中。集群执行的相关信息请参考 [这里]({{< ref "docs/dev/configuration/overview" >}}).
 
