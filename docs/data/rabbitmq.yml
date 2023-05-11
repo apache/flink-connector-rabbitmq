@@ -17,5 +17,5 @@
 ################################################################################
 
 variants:
-  - maven: flink-connector-pulsar
+  - maven: flink-connector-rabbitmq
     sql_url: https://repo.maven.apache.org/maven2/org/apache/flink/flink-sql-connector-rabbitmq/$full_version/flink-sql-connector-rabbitmq-$full_version.jar
