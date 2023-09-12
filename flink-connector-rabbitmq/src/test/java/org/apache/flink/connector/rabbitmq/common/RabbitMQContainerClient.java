@@ -116,6 +116,10 @@ public class RabbitMQContainerClient<T> {
         latch.await();
     }
 
+    public void close() throws IOException, TimeoutException {
+        this.channel.close();
+    }
+
     private void handleMessageReceivedCallback(String consumerTag, Delivery delivery) {
         byte[] body = delivery.getBody();
         messages.add(body);

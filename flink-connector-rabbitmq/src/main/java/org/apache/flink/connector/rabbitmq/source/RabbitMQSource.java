@@ -39,6 +39,7 @@ import org.apache.flink.connector.rabbitmq.source.reader.specialized.RabbitMQSou
 import org.apache.flink.connector.rabbitmq.source.split.RabbitMQSourceSplit;
 import org.apache.flink.connector.rabbitmq.source.split.RabbitMQSourceSplitSerializer;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
+import org.apache.flink.util.Preconditions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -291,7 +292,7 @@ public class RabbitMQSource<T>
          */
         public RabbitMQSourceBuilder<T> setDeserializationSchema(
                 DeserializationSchema<T> deserializationSchema) {
-            this.deserializationSchema = deserializationSchema;
+            this.deserializationSchema = Preconditions.checkNotNull(deserializationSchema);
             return this;
         }
 

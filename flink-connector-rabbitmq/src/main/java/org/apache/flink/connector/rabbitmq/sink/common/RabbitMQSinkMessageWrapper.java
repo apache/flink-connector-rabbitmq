@@ -21,6 +21,8 @@ package org.apache.flink.connector.rabbitmq.sink.common;
 import org.apache.flink.connector.rabbitmq.sink.writer.specialized.RabbitMQSinkWriterAtLeastOnce;
 import org.apache.flink.connector.rabbitmq.sink.writer.specialized.RabbitMQSinkWriterExactlyOnce;
 
+import javax.annotation.Nullable;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,23 +35,23 @@ import static java.util.Objects.requireNonNull;
  * exchange/routing key from the message content.
  */
 public class RabbitMQSinkMessageWrapper<T> {
-    private T message;
+    private final @Nullable T message;
     private final byte[] bytes;
 
     public RabbitMQSinkMessageWrapper(byte[] bytes) {
-        this.bytes = requireNonNull(bytes);
+        this(null, bytes);
     }
 
     public RabbitMQSinkMessageWrapper(T message, byte[] bytes) {
-        this(bytes);
-        this.message = requireNonNull(message);
+        this.bytes = requireNonNull(bytes);
+        this.message = message;
     }
 
     public byte[] getBytes() {
         return bytes;
     }
 
-    public T getMessage() {
+    public @Nullable T getMessage() {
         return message;
     }
 }

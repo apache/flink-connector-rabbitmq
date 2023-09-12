@@ -91,6 +91,7 @@ public class RabbitMQSourceReaderExactlyOnce<T> extends RabbitMQSourceReaderBase
 
     @Override
     protected void handleMessagePolled(RabbitMQSourceMessageWrapper<T> message) {
+        System.out.println("handleMessagePolled  " + message.getMessage());
         this.polledAndUnacknowledgedMessagesSinceLastCheckpoint.add(message);
     }
 

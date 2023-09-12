@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -123,9 +122,10 @@ public abstract class RabbitMQSourceReaderBase<T> implements SourceReader<T, Rab
         rmqChannel.queueDeclare(split.getQueueName(), true, false, false, null);
 
         // Set maximum of unacknowledged messages
-        if (getSplit().getConnectionConfig().getPrefetchCount().isPresent()) {
+        Integer prefetchCount = getSplit().getConnectionConfig().getPrefetchCount();
+        if (prefetchCount != null) {
             // global: false - the prefetch count is set per consumer, not per RabbitMQ channel
-            rmqChannel.basicQos(getSplit().getConnectionConfig().getPrefetchCount().get(), false);
+            rmqChannel.basicQos(prefetchCount, false);
         }
 
         final DeliverCallback deliverCallback = this::handleMessageReceivedCallback;
@@ -159,7 +159,7 @@ public abstract class RabbitMQSourceReaderBase<T> implements SourceReader<T, Rab
 
     @Override
     public List<RabbitMQSourceSplit> snapshotState(long checkpointId) {
-        return split != null ? Collections.singletonList(split.copy()) : new ArrayList<>();
+        return split != null ? Collections.singletonList(split.copy()) : Collections.emptyList();
     }
 
     @Override
@@ -170,6 +170,15 @@ public abstract class RabbitMQSourceReaderBase<T> implements SourceReader<T, Rab
                         // supposed to be empty
                     }
                 });
+        /*
+         * a) It runs in a non-specified thread pool,
+         * which means it runs in the JVMs common pool which may also be in use
+         * by other components. Use a dedicated executor.
+         * b) It hot-loops, which both blocks an entire thread from doing
+         * anything and blows through CPU cycles. Consider restructuring the
+         * collector to return a sort of availability future that is completed once a message
+         * was added, or use basic locking to at least prevent hot-looping.
+         */
     }
 
     /**

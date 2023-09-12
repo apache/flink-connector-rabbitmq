@@ -21,6 +21,7 @@ package org.apache.flink.connector.rabbitmq.sink.state;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.connector.rabbitmq.sink.common.RabbitMQSinkMessageWrapper;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
+import org.apache.flink.util.IOUtils;
 
 import javax.annotation.Nullable;
 
@@ -110,7 +111,7 @@ public class RabbitMQSinkWriterStateSerializer<T>
         List<RabbitMQSinkMessageWrapper<T>> messages = new ArrayList<>();
         for (int i = 0; i < numberOfMessages; i++) {
             byte[] bytes = new byte[in.readInt()];
-            in.read(bytes);
+            IOUtils.readFully(in, bytes, 0, bytes.length);
 
             // In this case, the messages need to be deserialized again, so we can recompute publish
             // options

@@ -24,11 +24,12 @@ import com.rabbitmq.client.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+
 import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -54,16 +55,16 @@ public class RabbitMQConnectionConfig implements Serializable {
     private String password;
     private String uri;
 
-    private Integer networkRecoveryInterval;
-    private Boolean automaticRecovery;
-    private Boolean topologyRecovery;
+    private final @Nullable Integer networkRecoveryInterval;
+    private final @Nullable Boolean automaticRecovery;
+    private final @Nullable Boolean topologyRecovery;
 
-    private Integer connectionTimeout;
-    private Integer requestedChannelMax;
-    private Integer requestedFrameMax;
-    private Integer requestedHeartbeat;
+    private final @Nullable Integer connectionTimeout;
+    private final @Nullable Integer requestedChannelMax;
+    private final @Nullable Integer requestedFrameMax;
+    private final @Nullable Integer requestedHeartbeat;
 
-    private Integer prefetchCount;
+    private final @Nullable Integer prefetchCount;
 
     /**
      * @param host host name
@@ -131,8 +132,8 @@ public class RabbitMQConnectionConfig implements Serializable {
             Integer requestedFrameMax,
             Integer requestedHeartbeat,
             Integer prefetchCount) {
-        Preconditions.checkNotNull(uri, "Uri can not be null");
-        this.uri = uri;
+
+        this.uri = Preconditions.checkNotNull(uri, "Uri can not be null");
 
         this.networkRecoveryInterval = networkRecoveryInterval;
         this.automaticRecovery = automaticRecovery;
@@ -196,7 +197,7 @@ public class RabbitMQConnectionConfig implements Serializable {
      * @return how long will automatic recovery wait before attempting to reconnect, in ms; default
      *     is 5000
      */
-    public Integer getNetworkRecoveryInterval() {
+    public @Nullable Integer getNetworkRecoveryInterval() {
         return networkRecoveryInterval;
     }
 
@@ -205,7 +206,7 @@ public class RabbitMQConnectionConfig implements Serializable {
      *
      * @return true if automatic connection recovery is enabled, false otherwise
      */
-    public Boolean isAutomaticRecovery() {
+    public @Nullable Boolean isAutomaticRecovery() {
         return automaticRecovery;
     }
 
@@ -214,7 +215,7 @@ public class RabbitMQConnectionConfig implements Serializable {
      *
      * @return true if topology recovery is enabled, false otherwise
      */
-    public Boolean isTopologyRecovery() {
+    public @Nullable Boolean isTopologyRecovery() {
         return topologyRecovery;
     }
 
@@ -223,7 +224,7 @@ public class RabbitMQConnectionConfig implements Serializable {
      *
      * @return the connection timeout, in milliseconds; zero for infinite
      */
-    public Integer getConnectionTimeout() {
+    public @Nullable Integer getConnectionTimeout() {
         return connectionTimeout;
     }
 
@@ -232,7 +233,7 @@ public class RabbitMQConnectionConfig implements Serializable {
      *
      * @return the initially requested maximum channel number; zero for unlimited
      */
-    public Integer getRequestedChannelMax() {
+    public @Nullable Integer getRequestedChannelMax() {
         return requestedChannelMax;
     }
 
@@ -241,7 +242,7 @@ public class RabbitMQConnectionConfig implements Serializable {
      *
      * @return the initially requested maximum frame size, in octets; zero for unlimited
      */
-    public Integer getRequestedFrameMax() {
+    public @Nullable Integer getRequestedFrameMax() {
         return requestedFrameMax;
     }
 
@@ -250,17 +251,17 @@ public class RabbitMQConnectionConfig implements Serializable {
      *
      * @return the initially requested heartbeat interval, in seconds; zero for none
      */
-    public Integer getRequestedHeartbeat() {
+    public @Nullable Integer getRequestedHeartbeat() {
         return requestedHeartbeat;
     }
 
     /**
      * Retrieve the the channel prefetch count.
      *
-     * @return an Optional of the prefetch count, if set, for the consumer channel
+     * @return an integer that represents the prefetch count, if not null, for the consumer channel
      */
-    public Optional<Integer> getPrefetchCount() {
-        return Optional.ofNullable(prefetchCount);
+    public @Nullable Integer getPrefetchCount() {
+        return prefetchCount;
     }
 
     /**

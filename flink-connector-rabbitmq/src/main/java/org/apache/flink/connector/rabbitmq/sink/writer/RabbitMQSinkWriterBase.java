@@ -26,9 +26,6 @@ import org.apache.flink.connector.rabbitmq.sink.common.RabbitMQSinkMessageWrappe
 import org.apache.flink.connector.rabbitmq.sink.common.RabbitMQSinkPublishOptions;
 import org.apache.flink.connector.rabbitmq.sink.common.SerializableReturnListener;
 import org.apache.flink.connector.rabbitmq.sink.state.RabbitMQSinkWriterState;
-import org.apache.flink.connector.rabbitmq.sink.writer.specialized.RabbitMQSinkWriterAtLeastOnce;
-import org.apache.flink.connector.rabbitmq.sink.writer.specialized.RabbitMQSinkWriterAtMostOnce;
-import org.apache.flink.connector.rabbitmq.sink.writer.specialized.RabbitMQSinkWriterExactlyOnce;
 
 import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
@@ -41,8 +38,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 /**
- * RabbitMQSinkWriterBase is the common abstract class of {@link RabbitMQSinkWriterAtMostOnce},
- * {@link RabbitMQSinkWriterAtLeastOnce} and {@link RabbitMQSinkWriterExactlyOnce}.
+ * RabbitMQSinkWriterBase is the common RabbitMQSinkWriter.
  *
  * @param <T> Type of the elements in this sink
  */

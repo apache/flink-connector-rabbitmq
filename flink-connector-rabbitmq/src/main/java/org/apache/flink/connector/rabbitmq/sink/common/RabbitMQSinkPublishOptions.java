@@ -22,6 +22,7 @@ import org.apache.flink.api.common.serialization.DeserializationSchema;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -34,7 +35,7 @@ import java.util.Optional;
  * @param <IN> The type of the data used by the sink.
  */
 @PublicEvolving
-public interface RabbitMQSinkPublishOptions<IN> extends java.io.Serializable {
+public interface RabbitMQSinkPublishOptions<IN> extends Serializable {
 
     /**
      * Compute the message's routing key from the data.
