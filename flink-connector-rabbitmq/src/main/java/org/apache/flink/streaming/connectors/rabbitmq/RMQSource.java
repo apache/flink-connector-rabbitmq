@@ -22,6 +22,7 @@ import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.common.serialization.DeserializationSchema;
 import org.apache.flink.api.common.serialization.RuntimeContextInitializationContextAdapters;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.operators.translation.RichCombineToGroupCombineWrapper;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.source.MessageAcknowledgingSourceBase;
@@ -42,6 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -236,7 +239,10 @@ public class RMQSource<OUT> extends MultipleIdsMessageAcknowledgingSourceBase<OU
     @Override
     public void open(Configuration config) throws Exception {
         super.open(config);
+        sessionIds = new ArrayList<>(64);
+        sessionIdsPerSnapshot = new ArrayDeque<>();
         try {
+            RichCombineToGroupCombineWrapper s;
             connection = setupConnection();
             channel = setupChannel(connection);
             if (channel == null) {
