@@ -42,6 +42,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -236,6 +238,8 @@ public class RMQSource<OUT> extends MultipleIdsMessageAcknowledgingSourceBase<OU
     @Override
     public void open(Configuration config) throws Exception {
         super.open(config);
+        sessionIds = new ArrayList<>(64);
+        sessionIdsPerSnapshot = new ArrayDeque<>();
         try {
             connection = setupConnection();
             channel = setupChannel(connection);

@@ -24,5 +24,5 @@ package org.apache.flink.streaming.connectors.rabbitmq.test;
  */
 public class DockerImageVersions {
 
-    public static final String RABBITMQ = "rabbitmq:3.9.8-management-alpine";
+    public static final String RABBITMQ = "rabbitmq:3.12.12-management-alpine";
 }
