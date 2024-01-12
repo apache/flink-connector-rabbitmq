@@ -241,7 +241,6 @@ public class RMQSource<OUT> extends MultipleIdsMessageAcknowledgingSourceBase<OU
         sessionIds = new ArrayList<>(64);
         sessionIdsPerSnapshot = new ArrayDeque<>();
         try {
-            RichCombineToGroupCombineWrapper s;
             connection = setupConnection();
             channel = setupChannel(connection);
             if (channel == null) {
