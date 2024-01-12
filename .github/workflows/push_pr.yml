@@ -23,6 +23,14 @@ concurrency:
   cancel-in-progress: true
 jobs:
   compile_and_test:
+    strategy:
+      matrix:
+        flink: [ 1.16.3, 1.17.2 ]
+        jdk: [ '8, 11' ]
+        include:
+          - flink: 1.18.0
+            jdk: '8, 11, 17'
     uses: apache/flink-connector-shared-utils/.github/workflows/ci.yml@ci_utils
     with:
-      flink_version: 1.16.1
+      flink_version: ${{ matrix.flink }}
+      jdk_version: ${{ matrix.jdk }}
