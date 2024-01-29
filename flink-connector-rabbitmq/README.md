@@ -1,4 +1,4 @@
-# License of the Rabbit MQ Connector
+# License of the RabbitMQ Connector
 
 Flink's RabbitMQ connector defines a Maven dependency on the
 "RabbitMQ AMQP Java Client", is triple-licensed under the Mozilla Public License 1.1 ("MPL"), the GNU General Public License version 2 ("GPL") and the Apache License version 2 ("ASL").
