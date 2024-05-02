@@ -17,7 +17,7 @@
 
 package org.apache.flink.streaming.connectors.rabbitmq;
 
-import org.apache.flink.annotation.PublicEvolving;
+import org.apache.flink.annotation.Public;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 
@@ -27,7 +27,8 @@ import com.rabbitmq.client.AMQP.BasicProperties;
  *
  * @param <IN> The type of the data used by the sink.
  */
-@PublicEvolving
+@Public
+@Deprecated
 public interface RMQSinkPublishOptions<IN> extends java.io.Serializable {
 
     /**
