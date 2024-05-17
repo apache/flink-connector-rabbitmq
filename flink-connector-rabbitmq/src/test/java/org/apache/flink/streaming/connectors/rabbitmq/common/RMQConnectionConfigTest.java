@@ -17,6 +17,8 @@
 
 package org.apache.flink.streaming.connectors.rabbitmq.common;
 
+import org.apache.flink.connector.rabbitmq.common.RabbitMQConnectionSetupException;
+
 import com.rabbitmq.client.ConnectionFactory;
 import org.junit.Test;
 
@@ -33,9 +35,10 @@ import static org.junit.Assert.assertTrue;
 /** Tests for the {@link RMQConnectionConfig}. */
 public class RMQConnectionConfigTest {
 
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowNullPointExceptionIfHostIsNull()
-            throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionIfHostIsNull()
+            throws RabbitMQConnectionSetupException, URISyntaxException, NoSuchAlgorithmException,
+                    KeyManagementException {
         RMQConnectionConfig connectionConfig =
                 new RMQConnectionConfig.Builder()
                         .setPort(1000)
@@ -46,22 +49,20 @@ public class RMQConnectionConfigTest {
         connectionConfig.getConnectionFactory();
     }
 
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowNullPointExceptionIfPortIsNull()
-            throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        RMQConnectionConfig connectionConfig =
-                new RMQConnectionConfig.Builder()
-                        .setHost("localhost")
-                        .setUserName("guest")
-                        .setPassword("guest")
-                        .setVirtualHost("/")
-                        .build();
-        connectionConfig.getConnectionFactory();
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowIllegalArgumentExceptionIfPortIsNull() {
+        new RMQConnectionConfig.Builder()
+                .setHost("localhost")
+                .setUserName("guest")
+                .setPassword("guest")
+                .setVirtualHost("/")
+                .build();
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void shouldSetDefaultValueIfConnectionTimeoutNotGiven()
-            throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+            throws RabbitMQConnectionSetupException, URISyntaxException, NoSuchAlgorithmException,
+                    KeyManagementException {
         RMQConnectionConfig connectionConfig =
                 new RMQConnectionConfig.Builder()
                         .setHost("localhost")
@@ -75,7 +76,8 @@ public class RMQConnectionConfigTest {
 
     @Test
     public void shouldSetProvidedValueIfConnectionTimeoutNotGiven()
-            throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+            throws RabbitMQConnectionSetupException, URISyntaxException, NoSuchAlgorithmException,
+                    KeyManagementException {
         RMQConnectionConfig connectionConfig =
                 new RMQConnectionConfig.Builder()
                         .setHost("localhost")

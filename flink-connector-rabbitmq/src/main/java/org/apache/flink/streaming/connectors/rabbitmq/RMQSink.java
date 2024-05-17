@@ -41,6 +41,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @param <IN>
  */
+@Deprecated
 public class RMQSink<IN> extends RichSinkFunction<IN> {
     private static final long serialVersionUID = 1L;
 

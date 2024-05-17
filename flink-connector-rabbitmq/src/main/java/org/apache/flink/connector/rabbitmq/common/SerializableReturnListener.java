@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-package org.apache.flink.streaming.connectors.rabbitmq;
+package org.apache.flink.connector.rabbitmq.common;
 
 import org.apache.flink.annotation.PublicEvolving;
 
 import com.rabbitmq.client.ReturnListener;
 
+import java.io.Serializable;
+
 /** A serializable {@link ReturnListener}. */
 @PublicEvolving
-public interface SerializableReturnListener
-        extends org.apache.flink.connector.rabbitmq.common.SerializableReturnListener {}
+public interface SerializableReturnListener extends Serializable, ReturnListener {}
